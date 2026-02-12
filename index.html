@@ -17,6 +17,8 @@ body{
   direction:rtl;
   overflow:hidden;
 }
+
+/* صندوق الرسالة */
 .box{
   background:rgba(255,255,255,0.15);
   padding:24px;
@@ -25,9 +27,12 @@ body{
   backdrop-filter:blur(10px);
   width:90%;
   max-width:360px;
-  z-index:2;
+  z-index:10; /* فوق الورد الخلفي */
+  position:relative;
 }
+
 h2{color:#fff;font-size:20px}
+
 input{
   width:100%;
   padding:12px;
@@ -37,6 +42,7 @@ input{
   margin-top:15px;
   font-size:16px;
 }
+
 button{
   margin-top:15px;
   padding:8px 22px;
@@ -46,6 +52,7 @@ button{
   font-size:15px;
   cursor:pointer;
 }
+
 .message{
   color:#fff;
   font-size:16px;
@@ -53,30 +60,33 @@ button{
   white-space:pre-line;
 }
 
-/* 🌷 الوردة الكبيرة النابضة */
+/* 🌷 الوردة الكبيرة */
 .big-rose{
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  font-size:90px;
+  font-size:100px;
   animation:pulse 1.6s infinite;
-  z-index:1000;
+  z-index:100; /* أعلى شيء */
 }
+
 @keyframes pulse{
   0%{transform:translate(-50%,-50%) scale(1)}
   50%{transform:translate(-50%,-50%) scale(1.2)}
   100%{transform:translate(-50%,-50%) scale(1)}
 }
 
-/* 🌸 الورد المتساقط */
+/* 🌸 الورد المتساقط (خلف الرسالة) */
 .flower{
-  position:absolute;
+  position:fixed;
   top:-50px;
   font-size:24px;
   animation:fall linear infinite;
-  z-index:1;
+  z-index:5; /* خلف الصندوق */
+  pointer-events:none;
 }
+
 @keyframes fall{
   to{transform:translateY(110vh) rotate(360deg)}
 }
@@ -85,7 +95,7 @@ button{
 
 <body>
 
-<audio id="music" loop preload="auto"></audio>
+<audio id="music" loop></audio>
 
 <div class="box" id="login">
   <h2>💙 أدخل كلمة السر 💙</h2>
@@ -97,32 +107,25 @@ button{
 const correctPassword = "02/28";
 
 const messageText = `
-روانتيييييي ☝🏻🙃🙃🙃🙃🙃
+روانتيييييي ☝🏻 🙃 🙃 🙃 🙃 🙃
 
-فات عام كامل،
-وكل عام وحنا بخير إن شاء الله 🤍  
-عام فيه ضحك وفرح ومشاعر حلوة بزاف.
+فات عام، كل عام وحنا بخير،
+ديما سعيدين وديما مع بعض.
+إن شاء الله هذا العام لول مش لخر.
 
-ديما سعيدين وديما مع بعض،
-هذا العام هو الأول وما يكونش الأخير،
-ربي يطوّل في عمرنا ونبقو ديما يد في يد.
+حبيت نقلك بلي هذا أجمل عام،
+وهذا أجمل نهار،
+لأنك دخلتي فيه انتي لحياتي
+وليتي جزء منها، تؤبريني 🙃 🙃 🙃
 
-حبيت نقلك بلي هذا أجمل عام عشته،
-وأجمل نهار فيه هو النهار
-اللي دخلتي فيه لحياتي،
-ومن نهارها وليتي جزء منها
-وجزء مني أنا 💖
-
-تؤبريني 🙃🙃🙃  
-وإن شاء الله تكون عجبتك الفكرة ☝🏻🙃🙃🙃🙃🙃
+إن شاء الله تكون عجبتك ☝🏻🙃🙃🙃🙃🙃
 `;
 
 let i = 0;
 
 function check(){
-  if(document.getElementById("password").value === correctPassword){
+  if(password.value === correctPassword){
 
-    const music=document.getElementById("music");
     music.src="https://cdn.pixabay.com/audio/2022/10/25/audio_7b1c0c77c6.mp3";
     music.play();
 
@@ -135,6 +138,7 @@ function check(){
       </div>
     `;
     typeWriter();
+    startFlowers(); // يبدأ الورد مباشرة بالخلفية
   }else{
     alert("كلمة السر خاطئة 💔");
   }
@@ -142,11 +146,11 @@ function check(){
 
 function typeWriter(){
   if(i < messageText.length){
-    document.getElementById("typed").innerHTML += messageText.charAt(i);
+    typed.innerHTML += messageText.charAt(i);
     i++;
-    setTimeout(typeWriter,90);
+    setTimeout(typeWriter,80);
   }else{
-    document.getElementById("surpriseBtn").style.display="inline-block";
+    surpriseBtn.style.display="inline-block";
   }
 }
 
@@ -157,10 +161,9 @@ function showRose(){
   rose.className="big-rose";
   rose.innerText="🌷";
   document.body.appendChild(rose);
-
-  startFlowers();
 }
 
+/* الورد الخلفي */
 function startFlowers(){
   const flowers=["🌸","🌷","💮","🤍"];
   setInterval(()=>{
@@ -171,7 +174,7 @@ function startFlowers(){
     f.style.animationDuration=3+Math.random()*3+"s";
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),7000);
-  },220);
+  },250);
 }
 </script>
 
