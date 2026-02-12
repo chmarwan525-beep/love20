@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Love Story 💙</title>
+<title>Our Love 💙</title>
 
 <style>
 body{
@@ -16,11 +16,10 @@ body{
   font-family:Arial,sans-serif;
   direction:rtl;
   overflow:hidden;
+  color:#fff;
 }
 
-/* صندوق الرسالة */
 .box{
-  position:relative;
   background:rgba(255,255,255,0.15);
   padding:24px;
   border-radius:25px;
@@ -28,10 +27,8 @@ body{
   backdrop-filter:blur(10px);
   width:90%;
   max-width:360px;
-  z-index:10; /* فوق الورد */
+  z-index:5;
 }
-
-h2{color:#fff;font-size:20px}
 
 input{
   width:100%;
@@ -54,7 +51,6 @@ button{
 }
 
 .message{
-  color:#fff;
   font-size:16px;
   line-height:2;
   white-space:pre-line;
@@ -63,12 +59,12 @@ button{
 /* 🌷 الوردة الكبيرة */
 .big-rose{
   position:fixed;
-  top:50%;
+  top:35%;
   left:50%;
   transform:translate(-50%,-50%);
   font-size:90px;
   animation:pulse 1.6s infinite;
-  z-index:100;
+  z-index:20;
 }
 @keyframes pulse{
   0%{transform:translate(-50%,-50%) scale(1)}
@@ -76,34 +72,58 @@ button{
   100%{transform:translate(-50%,-50%) scale(1)}
 }
 
-/* 🌸 الورد المتساقط (خلف الرسالة) */
+/* 🌸 الورد بالخلف */
 .flower{
   position:fixed;
-  top:-40px;
-  font-size:24px;
+  top:-50px;
+  font-size:22px;
   animation:fall linear infinite;
-  z-index:2;
+  z-index:1;
   pointer-events:none;
-  opacity:0.9;
 }
 @keyframes fall{
   to{transform:translateY(110vh) rotate(360deg)}
+}
+
+/* ⏱️ العداد */
+.counter-box{
+  position:fixed;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(255,192,203,0.25);
+  padding:16px 22px;
+  border-radius:20px;
+  text-align:center;
+  backdrop-filter:blur(8px);
+  z-index:15;
+}
+
+.counter-title{
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.counter-time{
+  font-size:18px;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="music" loop preload="auto"></audio>
-
 <div class="box" id="login">
-  <h2>💙 أدخل كلمة السر 💙</h2>
+  <h3>💙 أدخل كلمة السر 💙</h3>
   <input id="password" placeholder="كلمة السر">
   <button onclick="check()">دخول</button>
 </div>
 
 <script>
 const correctPassword = "02/28";
+
+/* 📅 تاريخ التعارف (اضبطه كما تريد) */
+const startDate = new Date("2025-02-28T00:00:00");
 
 const messageText = `
 روانتيييييي ☝🏻🙃🙃🙃🙃🙃
@@ -118,67 +138,88 @@ const messageText = `
 لأنك دخلتي فيه انتي لحياتي
 ووليتي جزء منها، تؤبريني 🤍
 
-إن شاء الله تكون عجبتك ☝🏻🙃🙃🙃🙃🙃
+إن شاء الله تكون عجبتك لفكرة ☝🏻🙃🙃🙃🙃🙃
 `;
 
-let i = 0;
+let i=0;
+let flowerInterval;
 
 function check(){
-  if(document.getElementById("password").value === correctPassword){
-
-    const music=document.getElementById("music");
-    music.src="https://cdn.pixabay.com/audio/2022/10/25/audio_7b1c0c77c6.mp3";
-    music.play();
-
-    document.body.innerHTML=`
-      <div class="box" id="content">
-        <div class="message" id="typed"></div>
-        <button id="surpriseBtn" onclick="showRose()" style="display:none;">
-          👇 اضغط هنا
-        </button>
-      </div>
-    `;
-
-    startFlowers(); // يبدأ الورد من البداية
-    typeWriter();
-  }else{
-    alert("كلمة السر خاطئة 💔");
-  }
+ if(password.value===correctPassword){
+  document.body.innerHTML=`
+   <div class="box" id="content">
+     <div class="message" id="typed"></div>
+     <button id="btn" style="display:none" onclick="showRose()">👇 اضغط هنا</button>
+   </div>`;
+  startFlowers();
+  typeWriter();
+ }else{
+  alert("كلمة السر خاطئة 💔");
+ }
 }
 
-/* ✨ كتابة تدريجية */
 function typeWriter(){
-  if(i < messageText.length){
-    document.getElementById("typed").innerHTML += messageText.charAt(i);
-    i++;
-    setTimeout(typeWriter,90);
-  }else{
-    document.getElementById("surpriseBtn").style.display="inline-block";
-  }
+ if(i<messageText.length){
+  typed.innerHTML+=messageText.charAt(i++);
+  setTimeout(typeWriter,90);
+ }else{
+  btn.style.display="inline-block";
+ }
 }
 
-/* 🌷 إظهار الوردة */
 function showRose(){
-  document.getElementById("content").remove();
+ document.getElementById("content").remove();
 
-  const rose=document.createElement("div");
-  rose.className="big-rose";
-  rose.innerText="🌷";
-  document.body.appendChild(rose);
+ const rose=document.createElement("div");
+ rose.className="big-rose";
+ rose.innerText="🌷";
+ document.body.appendChild(rose);
+
+ showCounter();
 }
 
-/* 🌸 تساقط الورد بالخلف */
+/* 🌸 الورد */
 function startFlowers(){
-  const flowers=["🌷","🌸","💮","🤍"];
-  setInterval(()=>{
-    const f=document.createElement("div");
-    f.className="flower";
-    f.innerText=flowers[Math.floor(Math.random()*flowers.length)];
-    f.style.left=Math.random()*100+"vw";
-    f.style.animationDuration=(4+Math.random()*3)+"s";
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),8000);
-  },300);
+ if(flowerInterval) return;
+ const flowers=["🌸","🌷","💮","🤍"];
+ flowerInterval=setInterval(()=>{
+  const f=document.createElement("div");
+  f.className="flower";
+  f.innerText=flowers[Math.floor(Math.random()*flowers.length)];
+  f.style.left=Math.random()*100+"vw";
+  f.style.animationDuration=3+Math.random()*3+"s";
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),7000);
+ },220);
+}
+
+/* ⏱️ حساب الوقت منذ التعارف */
+function showCounter(){
+ const box=document.createElement("div");
+ box.className="counter-box";
+ box.innerHTML=`
+   <div class="counter-title">أجمل أيامي بدأت منذ ☝🏻🙃🙃🙃🙃</div>
+   <div class="counter-time" id="counter"></div>
+ `;
+ document.body.appendChild(box);
+
+ setInterval(()=>{
+  const now=new Date();
+  let diff=Math.floor((now-startDate)/1000);
+
+  const days=Math.floor(diff/86400);
+  diff%=86400;
+  const hours=Math.floor(diff/3600);
+  diff%=3600;
+  const minutes=Math.floor(diff/60);
+  const seconds=diff%60;
+
+  counter.textContent=
+   days+" يوم · "+
+   hours+" ساعة · "+
+   minutes+" دقيقة · "+
+   seconds+" ثانية";
+ },1000);
 }
 </script>
 
