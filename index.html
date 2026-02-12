@@ -16,9 +16,7 @@ body{
   font-family:Arial,sans-serif;
   direction:rtl;
   overflow:hidden;
-  color:#fff;
 }
-
 .box{
   background:rgba(255,255,255,0.15);
   padding:24px;
@@ -27,86 +25,45 @@ body{
   backdrop-filter:blur(10px);
   width:90%;
   max-width:360px;
-  z-index:5;
+  z-index:2;
 }
-
-input{
+h2{color:#fff;font-size:20px}
+input,button{
   width:100%;
   padding:12px;
   border-radius:20px;
   border:none;
-  text-align:center;
-  margin-top:15px;
-  font-size:16px;
-}
-
-button{
-  margin-top:15px;
-  padding:8px 22px;
-  border-radius:20px;
-  border:none;
-  background:pink;
+  margin-top:12px;
   font-size:15px;
-  cursor:pointer;
+  text-align:center;
 }
+button{background:pink;cursor:pointer}
+.message{color:#fff;line-height:2;white-space:pre-line}
+.counter{color:#ffd; margin-top:15px; font-size:15px}
 
-.message{
-  font-size:16px;
-  line-height:2;
-  white-space:pre-line;
+/* الورد المتساقط */
+.flower{
+  position:fixed;
+  top:-40px;
+  font-size:22px;
+  animation:fall linear infinite;
+  z-index:1;
 }
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
 
-/* 🌷 الوردة الكبيرة */
+/* الوردة الكبيرة */
 .big-rose{
   position:fixed;
-  top:35%;
-  left:50%;
+  top:50%;left:50%;
   transform:translate(-50%,-50%);
   font-size:90px;
   animation:pulse 1.6s infinite;
-  z-index:20;
+  z-index:5;
 }
 @keyframes pulse{
   0%{transform:translate(-50%,-50%) scale(1)}
   50%{transform:translate(-50%,-50%) scale(1.2)}
   100%{transform:translate(-50%,-50%) scale(1)}
-}
-
-/* 🌸 الورد بالخلف */
-.flower{
-  position:fixed;
-  top:-50px;
-  font-size:22px;
-  animation:fall linear infinite;
-  z-index:1;
-  pointer-events:none;
-}
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg)}
-}
-
-/* ⏱️ العداد */
-.counter-box{
-  position:fixed;
-  bottom:40px;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(255,192,203,0.25);
-  padding:16px 22px;
-  border-radius:20px;
-  text-align:center;
-  backdrop-filter:blur(8px);
-  z-index:15;
-}
-
-.counter-title{
-  font-size:14px;
-  margin-bottom:8px;
-}
-
-.counter-time{
-  font-size:18px;
-  font-weight:bold;
 }
 </style>
 </head>
@@ -114,15 +71,15 @@ button{
 <body>
 
 <div class="box" id="login">
-  <h3>💙 أدخل كلمة السر 💙</h3>
-  <input id="password" placeholder="كلمة السر">
+  <h2>💙 أدخل كلمة السر 💙</h2>
+  <input id="password" placeholder="تاريخ ميلاد أفضل شخص فالدنيا ☝🏻🙃🙃🙃🙃">
   <button onclick="check()">دخول</button>
 </div>
 
 <script>
-const correctPassword = "02/28";
+const correctPassword = "08/17";
 
-/* 📅 تاريخ التعارف (اضبطه كما تريد) */
+/* تاريخ التعارف */
 const startDate = new Date("2025-02-28T00:00:00");
 
 const messageText = `
@@ -142,86 +99,71 @@ const messageText = `
 `;
 
 let i=0;
-let flowerInterval;
 
 function check(){
  if(password.value===correctPassword){
   document.body.innerHTML=`
    <div class="box" id="content">
      <div class="message" id="typed"></div>
+     <div class="counter" id="counter"></div>
      <button id="btn" style="display:none" onclick="showRose()">👇 اضغط هنا</button>
    </div>`;
   startFlowers();
   typeWriter();
- }else{
-  alert("كلمة السر خاطئة 💔");
  }
+ else alert("كلمة السر خاطئة 💔");
 }
 
+/* كتابة تدريجية */
 function typeWriter(){
  if(i<messageText.length){
   typed.innerHTML+=messageText.charAt(i++);
   setTimeout(typeWriter,90);
  }else{
-  btn.style.display="inline-block";
+  btn.style.display="block";
+  startCounter();
  }
 }
 
-function showRose(){
- document.getElementById("content").remove();
-
- const rose=document.createElement("div");
- rose.className="big-rose";
- rose.innerText="🌷";
- document.body.appendChild(rose);
-
- showCounter();
+/* العداد (منذ التعارف) */
+function startCounter(){
+ setInterval(()=>{
+  const now=new Date();
+  let diff=Math.floor((now-startDate)/1000);
+  const d=Math.floor(diff/86400);
+  diff%=86400;
+  const h=Math.floor(diff/3600);
+  diff%=3600;
+  const m=Math.floor(diff/60);
+  const s=diff%60;
+  counter.innerHTML=
+   `أجمل أيامي بدأت منذ 💙<br>
+    ${d} يوم • ${h} ساعة • ${m} دقيقة • ${s} ثانية`;
+ },1000);
 }
 
-/* 🌸 الورد */
+/* مفاجأة */
+function showRose(){
+ content.remove();
+ const r=document.createElement("div");
+ r.className="big-rose";
+ r.innerText="🌷";
+ document.body.appendChild(r);
+}
+
+/* الورد بالخلفية */
 function startFlowers(){
- if(flowerInterval) return;
- const flowers=["🌸","🌷","💮","🤍"];
- flowerInterval=setInterval(()=>{
+ const arr=["🌸","🌷","💮","🤍"];
+ setInterval(()=>{
   const f=document.createElement("div");
   f.className="flower";
-  f.innerText=flowers[Math.floor(Math.random()*flowers.length)];
+  f.innerText=arr[Math.floor(Math.random()*arr.length)];
   f.style.left=Math.random()*100+"vw";
   f.style.animationDuration=3+Math.random()*3+"s";
   document.body.appendChild(f);
   setTimeout(()=>f.remove(),7000);
  },220);
 }
-
-/* ⏱️ حساب الوقت منذ التعارف */
-function showCounter(){
- const box=document.createElement("div");
- box.className="counter-box";
- box.innerHTML=`
-   <div class="counter-title">أجمل أيامي بدأت منذ ☝🏻🙃🙃🙃🙃</div>
-   <div class="counter-time" id="counter"></div>
- `;
- document.body.appendChild(box);
-
- setInterval(()=>{
-  const now=new Date();
-  let diff=Math.floor((now-startDate)/1000);
-
-  const days=Math.floor(diff/86400);
-  diff%=86400;
-  const hours=Math.floor(diff/3600);
-  diff%=3600;
-  const minutes=Math.floor(diff/60);
-  const seconds=diff%60;
-
-  counter.textContent=
-   days+" يوم · "+
-   hours+" ساعة · "+
-   minutes+" دقيقة · "+
-   seconds+" ثانية";
- },1000);
-}
 </script>
-
 </body>
 </html>
