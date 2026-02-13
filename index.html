@@ -28,6 +28,7 @@ body{
   z-index:2;
 }
 h2{color:#fff;font-size:20px}
+
 input,button{
   width:100%;
   padding:12px;
@@ -37,11 +38,21 @@ input,button{
   font-size:15px;
   text-align:center;
 }
-button{background:pink;cursor:pointer}
-.message{color:#fff;line-height:2;white-space:pre-line}
-.counter{color:#ffebf0;margin-top:15px;font-size:15px}
 
-/* 🌸 ورد متساقط خلف الرسالة */
+button{
+  background:#ffffff;
+  color:#0a3d62;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.message{
+  color:#fff;
+  line-height:2;
+  white-space:pre-line;
+}
+
+/* 🌸 ورد متساقط */
 .flower{
   position:fixed;
   top:-40px;
@@ -53,20 +64,16 @@ button{background:pink;cursor:pointer}
   to{transform:translateY(110vh) rotate(360deg)}
 }
 
-/* 🌷 وردة كبيرة نابضة */
-.big-rose{
+/* 🖼️ الصورة */
+.love-img{
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  font-size:90px;
-  animation:pulse 1.6s infinite;
-  z-index:5;
-}
-@keyframes pulse{
-  0%{transform:translate(-50%,-50%) scale(1)}
-  50%{transform:translate(-50%,-50%) scale(1.2)}
-  100%{transform:translate(-50%,-50%) scale(1)}
+  max-width:260px;
+  border-radius:20px;
+  z-index:4;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 </style>
 </head>
@@ -80,13 +87,8 @@ button{background:pink;cursor:pointer}
 </div>
 
 <script>
-/* 🔐 كلمة السر */
 const correctPassword = "08/17";
 
-/* 📅 تاريخ التعارف */
-const startDate = new Date("2025-02-28T00:00:00");
-
-/* 💌 الرسالة */
 const messageText = `
 روانتيييييي ☝🏻🙃🙃🙃🙃🙃
 
@@ -110,17 +112,16 @@ function check(){
     document.body.innerHTML = `
       <div class="box" id="content">
         <div class="message" id="typed"></div>
-        <button id="btn" style="display:none" onclick="showRose()">👇 اضغط هنا</button>
+        <button id="btn" style="display:none" onclick="showImage()">👇 اضغط هنا</button>
       </div>
     `;
-    startFlowers();   // الورد يبدأ خلف الرسالة
+    startFlowers();
     typeWriter();
   }else{
     alert("كلمة السر خاطئة 💔");
   }
 }
 
-/* ✍️ كتابة تدريجية */
 function typeWriter(){
   if(i < messageText.length){
     typed.innerHTML += messageText.charAt(i++);
@@ -130,50 +131,26 @@ function typeWriter(){
   }
 }
 
-/* 🌷 بعد الضغط: وردة + عداد */
-function showRose(){
-  document.getElementById("content").remove();
+/* 🖼️ إظهار الصورة فقط */
+function showImage(){
+  if(document.getElementById("loveImg")) return;
 
-  const rose = document.createElement("div");
-  rose.className = "big-rose";
-  rose.innerText = "🌷";
-  document.body.appendChild(rose);
-
-  const counter = document.createElement("div");
-  counter.className = "counter";
-  counter.style.position = "fixed";
-  counter.style.bottom = "15%";
-  counter.style.textAlign = "center";
-  counter.style.width = "100%";
-  document.body.appendChild(counter);
-
-  setInterval(()=>{
-    const now = new Date();
-    let diff = Math.floor((now - startDate) / 1000);
-
-    const days = Math.floor(diff / 86400);
-    diff %= 86400;
-    const hours = Math.floor(diff / 3600);
-    diff %= 3600;
-    const minutes = Math.floor(diff / 60);
-    const seconds = diff % 60;
-
-    counter.innerHTML = `
-      أجمل أيامي بدأت منذ ☝🏻🙃🙃🙃🙃<br>
-      ${days} يوم • ${hours} ساعة • ${minutes} دقيقة • ${seconds} ثانية
-    `;
-  },1000);
+  const img = document.createElement("img");
+  img.src = "rose.png"; // ← اسم صورتك هنا
+  img.className = "love-img";
+  img.id = "loveImg";
+  document.body.appendChild(img);
 }
 
 /* 🌸 الورد بالخلفية */
 function startFlowers(){
-  const flowers = ["🌸","🌷","💮","🤍"];
+  const arr=["🌸","🌷","💮","🤍"];
   setInterval(()=>{
-    const f = document.createElement("div");
-    f.className = "flower";
-    f.innerText = flowers[Math.floor(Math.random()*flowers.length)];
-    f.style.left = Math.random()*100 + "vw";
-    f.style.animationDuration = 3 + Math.random()*3 + "s";
+    const f=document.createElement("div");
+    f.className="flower";
+    f.innerText=arr[Math.floor(Math.random()*arr.length)];
+    f.style.left=Math.random()*100+"vw";
+    f.style.animationDuration=3+Math.random()*3+"s";
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),7000);
   },220);
