@@ -9,7 +9,7 @@
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(135deg,#0a3d62,#1e90ff);
+  background:linear-gradient(135deg,#5dade2,#1f618d);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -17,8 +17,10 @@ body{
   direction:rtl;
   overflow:hidden;
 }
+
+/* الصندوق */
 .box{
-  background:rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.2);
   padding:24px;
   border-radius:25px;
   text-align:center;
@@ -27,6 +29,7 @@ body{
   max-width:360px;
   z-index:2;
 }
+
 h2{color:#fff;font-size:20px}
 
 input,button{
@@ -39,9 +42,10 @@ input,button{
   text-align:center;
 }
 
+/* الأزرار أبيض فقط */
 button{
   background:#ffffff;
-  color:#0a3d62;
+  color:#1f618d;
   cursor:pointer;
   font-weight:bold;
 }
@@ -52,7 +56,12 @@ button{
   white-space:pre-line;
 }
 
-/* 🌸 ورد متساقط */
+.counter{
+  color:#ffffff;
+  font-size:16px;
+}
+
+/* الورد المتساقط */
 .flower{
   position:fixed;
   top:-40px;
@@ -64,16 +73,20 @@ button{
   to{transform:translateY(110vh) rotate(360deg)}
 }
 
-/* 🖼️ الصورة */
-.love-img{
+/* الوردة الكبيرة */
+.big-rose{
   position:fixed;
-  top:50%;
+  top:45%;
   left:50%;
   transform:translate(-50%,-50%);
-  max-width:260px;
-  border-radius:20px;
-  z-index:4;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  font-size:90px;
+  animation:pulse 1.6s infinite;
+  z-index:5;
+}
+@keyframes pulse{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-50%,-50%) scale(1.2)}
+  100%{transform:translate(-50%,-50%) scale(1)}
 }
 </style>
 </head>
@@ -89,6 +102,10 @@ button{
 <script>
 const correctPassword = "08/17";
 
+/* تاريخ التعارف */
+const startDate = new Date("2025-02-28T00:00:00");
+
+/* الرسالة */
 const messageText = `
 روانتيييييي ☝🏻🙃🙃🙃🙃🙃
 
@@ -107,12 +124,13 @@ const messageText = `
 
 let i = 0;
 
+/* التحقق */
 function check(){
   if(password.value === correctPassword){
     document.body.innerHTML = `
       <div class="box" id="content">
         <div class="message" id="typed"></div>
-        <button id="btn" style="display:none" onclick="showImage()">👇 اضغط هنا</button>
+        <button id="btn" style="display:none" onclick="showRose()">👇 اضغط هنا</button>
       </div>
     `;
     startFlowers();
@@ -122,6 +140,7 @@ function check(){
   }
 }
 
+/* كتابة تدريجية */
 function typeWriter(){
   if(i < messageText.length){
     typed.innerHTML += messageText.charAt(i++);
@@ -131,26 +150,53 @@ function typeWriter(){
   }
 }
 
-/* 🖼️ إظهار الصورة فقط */
-function showImage(){
-  if(document.getElementById("loveImg")) return;
+/* عند الضغط */
+function showRose(){
 
-  const img = document.createElement("img");
-  img.src = "rose.png"; // ← اسم صورتك هنا
-  img.className = "love-img";
-  img.id = "loveImg";
-  document.body.appendChild(img);
+  /* إخفاء الكلام فقط */
+  document.getElementById("content").style.display = "none";
+
+  /* الوردة */
+  const rose = document.createElement("div");
+  rose.className = "big-rose";
+  rose.innerText = "🌷";
+  document.body.appendChild(rose);
+
+  /* العداد */
+  const counter = document.createElement("div");
+  counter.className = "counter";
+  counter.style.position = "fixed";
+  counter.style.bottom = "15%";
+  counter.style.width = "100%";
+  counter.style.textAlign = "center";
+  document.body.appendChild(counter);
+
+  setInterval(()=>{
+    const now = new Date();
+    let diff = Math.floor((now - startDate) / 1000);
+    const d = Math.floor(diff / 86400);
+    diff %= 86400;
+    const h = Math.floor(diff / 3600);
+    diff %= 3600;
+    const m = Math.floor(diff / 60);
+    const s = diff % 60;
+
+    counter.innerHTML = `
+      أجمل أيامي بدأت منذ ☝🏻🙃🙃🙃🙃<br>
+      ${d} يوم • ${h} ساعة • ${m} دقيقة • ${s} ثانية
+    `;
+  },1000);
 }
 
-/* 🌸 الورد بالخلفية */
+/* الورد بالخلفية */
 function startFlowers(){
-  const arr=["🌸","🌷","💮","🤍"];
+  const arr = ["🌸","🌷","💮","🤍"];
   setInterval(()=>{
-    const f=document.createElement("div");
-    f.className="flower";
-    f.innerText=arr[Math.floor(Math.random()*arr.length)];
-    f.style.left=Math.random()*100+"vw";
-    f.style.animationDuration=3+Math.random()*3+"s";
+    const f = document.createElement("div");
+    f.className = "flower";
+    f.innerText = arr[Math.floor(Math.random()*arr.length)];
+    f.style.left = Math.random()*100 + "vw";
+    f.style.animationDuration = 3 + Math.random()*3 + "s";
     document.body.appendChild(f);
     setTimeout(()=>f.remove(),7000);
   },220);
