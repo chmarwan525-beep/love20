@@ -9,7 +9,7 @@
 body{
   margin:0;
   min-height:100vh;
-  background:linear-gradient(135deg,#6fb7ff,#1e6fd9);
+  background:linear-gradient(135deg,#1e90ff,#ffffff);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -20,7 +20,7 @@ body{
 
 /* الصندوق */
 .box{
-  background:rgba(255,255,255,0.22);
+  background:rgba(255,255,255,0.25);
   padding:24px;
   border-radius:25px;
   text-align:center;
@@ -30,7 +30,7 @@ body{
   z-index:2;
 }
 
-h2{color:#fff;font-size:20px}
+h2{color:#0a3d62;font-size:20px}
 
 input,button{
   width:100%;
@@ -44,20 +44,22 @@ input,button{
 
 button{
   background:#ffffff;
-  color:#1e6fd9;
+  color:#0a3d62;
   font-weight:bold;
   cursor:pointer;
 }
 
 .message{
-  color:#fff;
+  color:#0a3d62;
   line-height:2;
   white-space:pre-line;
 }
 
 .counter{
-  color:#fff;
-  font-size:16px;
+  color:#0a3d62;
+  margin-top:20px;
+  font-size:15px;
+  text-align:center;
 }
 
 /* الورد المتساقط */
@@ -72,11 +74,39 @@ button{
   to{transform:translateY(110vh) rotate(360deg)}
 }
 
-/* نبض */
+/* الصورة مع نبض */
+.final-image{
+  position:fixed;
+  top:38%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:180px;
+  max-width:70%;
+  z-index:3;
+  animation:pulse 1.6s infinite;
+}
+
 @keyframes pulse{
   0%{transform:translate(-50%,-50%) scale(1)}
-  50%{transform:translate(-50%,-50%) scale(1.1)}
+  50%{transform:translate(-50%,-50%) scale(1.08)}
   100%{transform:translate(-50%,-50%) scale(1)}
+}
+
+/* الجملة تحت الصورة */
+.caption{
+  position:fixed;
+  top:60%;
+  width:100%;
+  text-align:center;
+  color:#0a3d62;
+  font-size:15px;
+  opacity:0;
+  animation:fadeIn 1.5s forwards;
+  animation-delay:1.5s;
+}
+
+@keyframes fadeIn{
+  to{opacity:1}
 }
 </style>
 </head>
@@ -85,7 +115,7 @@ button{
 
 <div class="box" id="login">
   <h2>💙 أدخل كلمة السر 💙</h2>
-  <input id="password" placeholder="تاريخ ميلاد أفضل شخص فالدنيا ☝🏻">
+  <input id="password" placeholder="تاريخ ميلاد أفضل شخص فالدنيا ☝🏻🙃🙃🙃">
   <button onclick="check()">دخول</button>
 </div>
 
@@ -96,29 +126,28 @@ const startDate = new Date("2025-02-28T00:00:00");
 const messageText = `
 روانتيييييي ☝🏻🙃🙃🙃🙃🙃
 كي تشوفي هذا رسالة تسما
-فات عام، كل عام وحنا بخير 💙
+فات اشمل واحلى عام في حياة مروان  ان شاء الله كل عام وحنا بخير 🫶🏻🫶🏻
 ديما سعيدين، ديما مع بعض،
 إن شاء الله هذا العام لول
 وما يكونش الأخير.
-باينة ماوش اخير نبقاو حتى نشوف ليث ونعقدو 😔 ☝🏻 😂 
+باينة خلاه ماوش لخر  ونبقاو حتى نعقد ليث ☝🏻😔😂😂
 حبيت نقلك بلي هذا
 أجمل عام وأجمل نهار
 لأنك دخلتي فيه انتي لحياتي
-ووليتي جزء منها 🤍
-نحبك شدن والله 🫶🏻
+ووليتي جزء منها   اسف كان كشما غلط ولا في هذا عام ☝🏻🙃🙃🙃😗
 `;
 
 let i = 0;
+startFlowers();
 
 function check(){
   if(password.value === correctPassword){
     document.body.innerHTML = `
       <div class="box" id="content">
         <div class="message" id="typed"></div>
-        <button id="btn" style="display:none" onclick="showImage()">👇 اضغط هنا</button>
+        <button id="btn" style="display:none" onclick="showFinal()">👇 اضغط هنا</button>
       </div>
     `;
-    startFlowers();
     typeWriter();
   }else{
     alert("كلمة السر خاطئة 💔");
@@ -128,35 +157,31 @@ function check(){
 function typeWriter(){
   if(i < messageText.length){
     typed.innerHTML += messageText.charAt(i++);
-    setTimeout(typeWriter,80);
+    setTimeout(typeWriter,90);
   }else{
     btn.style.display = "block";
   }
 }
 
-function showImage(){
-  /* إخفاء الرسالة */
-  document.getElementById("content").style.display = "none";
+/* بعد الضغط */
+function showFinal(){
+  document.getElementById("content").remove();
 
-  /* الصورة المرسومة */
   const img = document.createElement("img");
-  img.src = "rose.png";
-  img.style.position = "fixed";
-  img.style.top = "45%";
-  img.style.left = "50%";
-  img.style.transform = "translate(-50%,-50%)";
-  img.style.width = "220px";
-  img.style.zIndex = "5";
-  img.style.animation = "pulse 1.6s infinite";
+  img.src = "flower.png";
+  img.className = "final-image";
   document.body.appendChild(img);
 
-  /* العداد */
+  const caption = document.createElement("div");
+  caption.className = "caption";
+  caption.innerText = "رسمتها من البي على جالك ☝🏻😔😂";
+  document.body.appendChild(caption);
+
   const counter = document.createElement("div");
   counter.className = "counter";
   counter.style.position = "fixed";
-  counter.style.bottom = "14%";
+  counter.style.bottom = "12%";
   counter.style.width = "100%";
-  counter.style.textAlign = "center";
   document.body.appendChild(counter);
 
   setInterval(()=>{
@@ -176,19 +201,21 @@ function showImage(){
   },1000);
 }
 
+/* الورد */
 function startFlowers(){
-  const arr=["🌸","🤍","💮"];
+  const flowers = ["🎀","🌸","🌷","🌼","💐","⭐"];
   setInterval(()=>{
     const f=document.createElement("div");
     f.className="flower";
-    f.innerText=arr[Math.floor(Math.random()*arr.length)];
+    f.innerText=flowers[Math.floor(Math.random()*flowers.length)];
     f.style.left=Math.random()*100+"vw";
-    f.style.animationDuration=3+Math.random()*3+"s";
+    f.style.animationDuration=(3+Math.random()*4)+"s";
     document.body.appendChild(f);
-    setTimeout(()=>f.remove(),7000);
-  },220);
+    setTimeout(()=>f.remove(),8000);
+  },200);
 }
 </script>
 
 </body>
-  </html>
+</html>
+
